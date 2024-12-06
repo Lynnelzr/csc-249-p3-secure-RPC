@@ -1,0 +1,61 @@
+﻿certificate_authority:
+  
+
+
+
+secure_server:
+(base) liuzhirou@liuzhiroudeMacBook-Pro ~ % cd Desktop/csc-249-p3-secure-RPC-2
+(base) liuzhirou@liuzhiroudeMacBook-Pro csc-249-p3-secure-RPC-2 % python3 secure_server.py --server_IP 127.0.0.1 --server_port 65432 --CA_IP 127.0.0.1 --CA_port 55553
+Generated public key '(14236, 56533)' and private key '42297'
+Connecting to the certificate authority at IP 127.0.0.1 and port 55553
+Prepared the formatted unsigned certificate '(14236, 56533)|127.0.0.1|65432'
+Connection established, sending certificate '(14236, 56533)|127.0.0.1|65432' to the certificate authority to be signed
+Received signed certificate 'D_(47054, 56533)[(14236, 56533)|127.0.0.1|65432]' from the certificate authority
+server starting - listening for connections at IP 127.0.0.1 and port 65432
+Connected established with ('127.0.0.1', 52069)
+Received handshake request: TLS_HANDSHAKE_INIT
+Sending signed certificate 'D_(47054, 56533)[(14236, 56533)|127.0.0.1|65432]' to the client
+Received encrypted symmetric key 'E_(14236, 56533)[23565]' from the client
+Decrypted symmetric key: 23565
+TLS handshake complete: established symmetric key '23565', acknowledging to client
+Received client message: 'b'HMAC_97533[symmetric_23565[Hello, Secure Server]]'' [49 bytes]
+Decoded message 'Hello, Secure Server' from client
+Responding 'revreS eruceS ,olleH' to the client
+Sending encoded response 'HMAC_30498[symmetric_23565[revreS eruceS ,olleH]]' back to the client
+server is done!
+
+
+VPN:
+(base) liuzhirou@liuzhiroudeMacBook-Pro ~ % cd Desktop/csc-249-p3-secure-RPC-2
+(base) liuzhirou@liuzhiroudeMacBook-Pro csc-249-p3-secure-RPC-2 % python3 VPN.py --VPN_IP 127.0.0.1 --VPN_port 55554
+VPN starting - listening for connections at IP 127.0.0.1 and port 55554
+Connected established with ('127.0.0.1', 52068)
+Received client message: 'b'127.0.0.1~IP~65432~port~TLS_HANDSHAKE_INIT'' [42 bytes]
+connecting to server at IP 127.0.0.1 and port 65432
+server connection established, sending message 'TLS_HANDSHAKE_INIT'
+message sent to server, waiting for reply
+Received server response: 'b'D_(47054, 56533)[(14236, 56533)|127.0.0.1|65432]'' [48 bytes], forwarding to client
+Received client message: 'b'E_(14236, 56533)[23565]'' [23 bytes], forwarding to server
+Received server response: 'b"symmetric_23565[Symmetric key '23565' received]"' [47 bytes], forwarding to client
+Received client message: 'b'HMAC_97533[symmetric_23565[Hello, Secure Server]]'' [49 bytes], forwarding to server
+Received server response: 'b'HMAC_30498[symmetric_23565[revreS eruceS ,olleH]]'' [49 bytes], forwarding to client
+VPN is done!
+
+
+
+
+secure_client:
+(base) liuzhirou@liuzhiroudeMacBook-Pro ~ % cd Desktop/csc-249-p3-secure-RPC-2
+(base) liuzhirou@liuzhiroudeMacBook-Pro csc-249-p3-secure-RPC-2 % python3 secure_client.py --server_IP 127.0.0.1 --server_port 65432 --VPN_IP 127.0.0.1 --VPN_port 55554 --CA_IP 127.0.0.1 --CA_port 55553 --message "Hello, Secure Server!""
+Connecting to the certificate authority at IP 127.0.0.1 and port 55553
+Connection established, requesting public key
+Received public key (9479, 56533) from the certificate authority for verifying certificates
+Client starting - connecting to VPN at IP 127.0.0.1 and port 55554
+Received signed certificate: D_(47054, 56533)[(14236, 56533)|127.0.0.1|65432]
+TLS handshake complete: sent symmetric key '23565', waiting for acknowledgement
+Received acknowledgement 'Symmetric key '23565' received', preparing to send message
+Sending message 'HMAC_97533[symmetric_23565[Hello, Secure Server]]' to the server
+Message sent, waiting for reply
+Received raw response: 'b'HMAC_30498[symmetric_23565[revreS eruceS ,olleH]]'' [49 bytes]
+Decoded message 'revreS eruceS ,olleH' from server
+client is done!
